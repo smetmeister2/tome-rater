@@ -33,7 +33,7 @@ class Book(object):
 
     def set_isbn(self, new_isbn):
         self.isbn = new_isbn
-        print("The isbn for {book}, has been updated to {isbn}.".format(book=self.title, isbn=self.isbn))
+        print("The isbn for '{book}', has been updated to {isbn}.".format(book=self.title, isbn=self.isbn))
 
     def add_rating(self, rating):
         if rating >= 0 and rating <= 4:
@@ -47,7 +47,7 @@ class Book(object):
 
 class Fiction(Book):
     def __init__(self, title, author, isbn):
-        super().__init__()
+        super().__init__(title, isbn)
         self.author = author
 
     def get_author(self):
@@ -58,18 +58,19 @@ class Fiction(Book):
 
 
 class Non_Fiction(Book):
-    def __init__(self, subject, title, leven):
-        super().__init__()
-        pass
+    def __init__(self, subject, title, level, isbn):
+        super().__init__(title, isbn)
+        self.subject = subject
+        self.level = level
 
     def get_subject(self):
-        pass
+        return self.subject
 
     def get_level(self):
-        pass
+        return self.level
 
     def __repr__(self):
-        pass
+        return "{title}, a {level} manual on {subject}".format(title=self.title, level=self.level, subject=self.subject)
 
 if __name__ == "__main__":
     # Testing user class
@@ -79,14 +80,16 @@ if __name__ == "__main__":
     # users should be equal
     print(user1 == user2)
     # Change user2 email, so they won't be equal anymore.
+    print(user2.get_email())
     user2.change_email('niet@kareldegroot.nl')
+    print(user2.get_email())
 
     # Testing book class
     book1 = Book('I am a book', 178236217863)
     book2 = Book('I am a book', 178236217863)
     print(book1 == book2)
-    book1.get_title()
-    book1.get_isbn()
+    print(book1.get_title())
+    print(book1.get_isbn())
     #change isbn
     book1.set_isbn(109238901238)
     book1.add_rating(1)
@@ -95,4 +98,25 @@ if __name__ == "__main__":
     print(book1.ratings)
 
     # Test Fiction class
+    fiction1 = Fiction("Alice In Wonderland", "Lewis Carroll", 981237123)
+    print(fiction1.get_isbn())
+    print(fiction1.get_author())
+    print(fiction1.get_title())
+    print(fiction1)
+
+    # Test Non_Fiction class
+    non_fiction1 = Non_Fiction("Society of Mind", "Artificial Intelligence", "beginner", 3456787654)
+    print(non_fiction1)
+    print(non_fiction1.get_title())
+    print(non_fiction1.get_subject())
+    print(non_fiction1.get_level())
+
+
+
+
+
+
+
+
+
 
