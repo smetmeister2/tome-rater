@@ -18,6 +18,17 @@ class User(object):
         if self.name == other_user.name and self.email == other_user.email:
             return "These users are the same!"
 
+    def read_book(self, book, rating=None):
+        self.books[book] = rating
+
+    def get_average(self):
+        total = 0
+        count = 0
+        for book,rate in self.books.items():
+            if rate:
+                total += rate
+                count += 1
+        return total/count
 
 class Book(object):
     def __init__(self, title, isbn):
@@ -44,6 +55,12 @@ class Book(object):
     def __eq__(self, other_book):
         if self.title == other_book.title and self.isbn == other_book.isbn:
             return "These books are the same!"
+
+    def __hash__(self):
+        return hash((self.title, self.isbn))
+
+    def get_average(self):
+        return sum(self.ratings) / len(self.ratings)
 
 class Fiction(Book):
     def __init__(self, title, author, isbn):
@@ -111,10 +128,27 @@ if __name__ == "__main__":
     print(non_fiction1.get_subject())
     print(non_fiction1.get_level())
 
+    # Testing User read_book and get_average
+    print(user1)
+    user1.read_book(book1)
+    user1.read_book(book2, 5)
+    print(user1)
+    print(user1.get_average())
+    user1.read_book(book1, 3)
+    user1.read_book(book2, 5)
+    print(user1)
+    print(user1.get_average())
 
-
-
-
+    # Testing Book get_average
+    print(book1.ratings)
+    print(book1.get_average())
+    book1.add_rating(1)
+    book1.add_rating(4)
+    book1.add_rating(3)
+    book1.add_rating(2)
+    book1.add_rating(3)
+    print(book1.ratings)
+    print(book1.get_average())
 
 
 
