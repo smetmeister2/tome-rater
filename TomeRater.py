@@ -60,7 +60,8 @@ class Book(object):
         return hash((self.title, self.isbn))
 
     def get_average(self):
-        return sum(self.ratings) / len(self.ratings)
+        if len(self.ratings) >= 1:
+            return sum(self.ratings) / len(self.ratings)
 
 class Fiction(Book):
     def __init__(self, title, author, isbn):
@@ -89,7 +90,7 @@ class Non_Fiction(Book):
     def __repr__(self):
         return "{title}, a {level} manual on {subject}".format(title=self.title, level=self.level, subject=self.subject)
 
-class TomeRater():
+class Tome_Rater(object):
     def __init__(self):
         self.users = {}
         self.books = {}
@@ -104,20 +105,25 @@ class TomeRater():
         return Non_Fiction(title, subject, level, isbn)
 
     # TODO is not done yet
-    def add_book_to_user(book, email, rating=None):
+    def add_book_to_user(self, book, email, rating=None):
+        print(self)
         # find user
             # read_book on user
             # add_rating on book
             # check if book already exist, if not create with value1
             # else increment self.books +1
-        else:
-            return "No user with email {email}!".format(email=email)
+        #for user in self.users.items():
+         #   print(user)
+            #if user['email'] == email:
+            #    user
+        #else:
+        #    return "No user with email {email}!".format(email=email)
 
     def add_user(name, email, user_books=None):
         new_user = User(name, email)
         if user_books:
             for book in user_books:
-                add_book_to_user(book, email)
+                Tome_Rater.add_book_to_user(book, email, book.get_average())
 
 
 if __name__ == "__main__":
@@ -170,6 +176,8 @@ if __name__ == "__main__":
     print(user1)
     print(user1.get_average())
 
+    #Tome_Rater.add_book_to_user(book1, "niet@kareldegroot.nl", 1)
+
     # Testing Book get_average
     print(book1.ratings)
     print(book1.get_average())
@@ -182,6 +190,32 @@ if __name__ == "__main__":
     print(book1.get_average())
 
 
+    #Create some books:
+    book1 = Tome_Rater.create_book("Society of Mind", 12345678)
+    novel1 = Tome_Rater.create_novel("Alice In Wonderland", "Lewis Carroll", 12345)
+    novel1.set_isbn(9781536831139)
+    nonfiction1 = Tome_Rater.create_non_fiction("Automate the Boring Stuff", "Python", "beginner", 1929452)
+    nonfiction2 = Tome_Rater.create_non_fiction("Computing Machinery and Intelligence", "AI", "advanced", 11111938)
+    novel2 = Tome_Rater.create_novel("The Diamond Age", "Neal Stephenson", 10101010)
+    novel3 = Tome_Rater.create_novel("There Will Come Soft Rains", "Ray Bradbury", 10001000)
+
+    #Create users:
+    Tome_Rater.add_user("Alan Turing", "alan@turing.com")
+    Tome_Rater.add_user("David Marr", "david@computation.org")
+
+    #Add a user with three books already read:
+    Tome_Rater.add_user("Marvin Minsky", "marvin@mit.edu", user_books=[book1, novel1, nonfiction1])
+
+    #Add books to a user one by one, with ratings:
+    Tome_Rater.add_book_to_user(book1, "alan@turing.com", 1)
+    Tome_Rater.add_book_to_user(novel1, "alan@turing.com", 3)
+    Tome_Rater.add_book_to_user(nonfiction1, "alan@turing.com", 3)
+    Tome_Rater.add_book_to_user(nonfiction2, "alan@turing.com", 4)
+    Tome_Rater.add_book_to_user(novel3, "alan@turing.com", 1)
+
+    Tome_Rater.add_book_to_user(novel2, "marvin@mit.edu", 2)
+    Tome_Rater.add_book_to_user(novel3, "marvin@mit.edu", 2)
+    Tome_Rater.add_book_to_user(novel3, "david@computation.org", 4)
 
 
 
