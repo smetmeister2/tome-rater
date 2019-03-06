@@ -89,6 +89,37 @@ class Non_Fiction(Book):
     def __repr__(self):
         return "{title}, a {level} manual on {subject}".format(title=self.title, level=self.level, subject=self.subject)
 
+class TomeRater():
+    def __init__(self):
+        self.users = {}
+        self.books = {}
+
+    def create_book(title, isbn):
+        return Book(title, isbn)
+
+    def create_novel(title, author, isbn):
+        return Fiction(title, author, isbn)
+
+    def create_non_fiction(title, subject, level, isbn):
+        return Non_Fiction(title, subject, level, isbn)
+
+    # TODO is not done yet
+    def add_book_to_user(book, email, rating=None):
+        # find user
+            # read_book on user
+            # add_rating on book
+            # check if book already exist, if not create with value1
+            # else increment self.books +1
+        else:
+            return "No user with email {email}!".format(email=email)
+
+    def add_user(name, email, user_books=None):
+        new_user = User(name, email)
+        if user_books:
+            for book in user_books:
+                add_book_to_user(book, email)
+
+
 if __name__ == "__main__":
     # Testing user class
     user1 = User('karel', 'karel@kareldegroot.mail')
