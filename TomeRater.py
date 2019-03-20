@@ -90,37 +90,34 @@ class Non_Fiction(Book):
     def __repr__(self):
         return "{title}, a {level} manual on {subject}".format(title=self.title, level=self.level, subject=self.subject)
 
-class Tome_Rater(object):
+class TomeRater(object):
     def __init__(self):
         self.users = {}
         self.books = {}
 
-    def create_book(title, isbn):
+    def create_book(self, title, isbn):
         return Book(title, isbn)
 
-    def create_novel(title, author, isbn):
+    def create_novel(self, title, author, isbn):
         return Fiction(title, author, isbn)
 
-    def create_non_fiction(title, subject, level, isbn):
+    def create_non_fiction(self, title, subject, level, isbn):
         return Non_Fiction(title, subject, level, isbn)
 
-    # TODO is not done yet
     def add_book_to_user(self, book, email, rating=None):
-        print(self)
-        # find user
-            # read_book on user
-            # add_rating on book
-            # check if book already exist, if not create with value1
-            # else increment self.books +1
-        #for user in self.users.items():
-         #   print(user)
-            #if user['email'] == email:
-            #    user
-        #else:
-        #    return "No user with email {email}!".format(email=email)
+        if self.users[email]:
+            self.users[email].read_book(book, rating)
+            if rating:
+                book.add_rating(rating)
+            if self.books.get(book.title):
+                self.books[book.title] += 1
+            else:
+                self.books[book.title] = 1
+        else:
+            return "No user with email {email}!".format(email=email)
 
-    def add_user(name, email, user_books=None):
-        new_user = User(name, email)
+    def add_user(self, name, email, user_books=None):
+        self.users[email] = User(name, email)
         if user_books:
             for book in user_books:
                 Tome_Rater.add_book_to_user(book, email, book.get_average())
@@ -189,6 +186,7 @@ if __name__ == "__main__":
     print(book1.ratings)
     print(book1.get_average())
 
+    Tome_Rater = TomeRater()
 
     #Create some books:
     book1 = Tome_Rater.create_book("Society of Mind", 12345678)
@@ -216,6 +214,4 @@ if __name__ == "__main__":
     Tome_Rater.add_book_to_user(novel2, "marvin@mit.edu", 2)
     Tome_Rater.add_book_to_user(novel3, "marvin@mit.edu", 2)
     Tome_Rater.add_book_to_user(novel3, "david@computation.org", 4)
-
-
 
