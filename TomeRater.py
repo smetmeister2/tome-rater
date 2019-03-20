@@ -21,7 +21,7 @@ class User(object):
     def read_book(self, book, rating=None):
         self.books[book] = rating
 
-    def get_average(self):
+    def get_average_rating(self):
         total = 0
         count = 0
         for book,rate in self.books.items():
@@ -109,10 +109,10 @@ class TomeRater(object):
             self.users[email].read_book(book, rating)
             if rating:
                 book.add_rating(rating)
-            if self.books.get(book.title):
-                self.books[book.title] += 1
+            if self.books.get(book):
+                self.books[book] += 1
             else:
-                self.books[book.title] = 1
+                self.books[book] = 1
         else:
             return "No user with email {email}!".format(email=email)
 
@@ -120,7 +120,39 @@ class TomeRater(object):
         self.users[email] = User(name, email)
         if user_books:
             for book in user_books:
-                Tome_Rater.add_book_to_user(book, email, book.get_average())
+                self.add_book_to_user(book, email, book.get_average())
+
+    # Analysis methods
+    def print_catalog(self):
+        for key, value in self.books.items():
+            print(key)
+
+    def print_users(self):
+        for key, value in self.users.items():
+            print(value)
+
+    def most_read_book(self):
+        return max(self.books, key=self.books.get)
+
+    def highest_rated_book(self):
+        highest_book = 0
+        highest_value = 0
+        for key, value in self.books.items():
+            current = key.get_average()
+            if current > highest_value:
+                highest_value = current
+                highest_book = key
+        return highest_book
+
+    def most_positive_user(self):
+        positive_user = 0
+        positivest_rating = 0
+        for key, value in self.users.items():
+            current = value.get_average_rating()
+            if current > positivest_rating:
+                positivest_rating = current
+                positive_user = value
+        return positive_user
 
 
 if __name__ == "__main__":
@@ -167,11 +199,11 @@ if __name__ == "__main__":
     user1.read_book(book1)
     user1.read_book(book2, 5)
     print(user1)
-    print(user1.get_average())
+    print(user1.get_average_rating())
     user1.read_book(book1, 3)
     user1.read_book(book2, 5)
     print(user1)
-    print(user1.get_average())
+    print(user1.get_average_rating())
 
     #Tome_Rater.add_book_to_user(book1, "niet@kareldegroot.nl", 1)
 
@@ -186,7 +218,7 @@ if __name__ == "__main__":
     print(book1.ratings)
     print(book1.get_average())
 
-    Tome_Rater = TomeRater()
+    #Tome_Rater = TomeRater()
 
     #Create some books:
     book1 = Tome_Rater.create_book("Society of Mind", 12345678)
@@ -215,3 +247,13 @@ if __name__ == "__main__":
     Tome_Rater.add_book_to_user(novel3, "marvin@mit.edu", 2)
     Tome_Rater.add_book_to_user(novel3, "david@computation.org", 4)
 
+    #Uncomment these to test your functions:
+    Tome_Rater.print_catalog()
+    Tome_Rater.print_users()
+
+    print("Most positive user:")
+    print(Tome_Rater.most_positive_user())
+    print("Highest rated book:")
+    print(Tome_Rater.highest_rated_book())
+    print("Most read book:")
+    print(Tome_Rater.most_read_book())
