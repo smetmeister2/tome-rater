@@ -1,3 +1,4 @@
+import random
 class User(object):
     def __init__(self, name, email):
         self.name = name
@@ -95,7 +96,17 @@ class TomeRater(object):
         self.users = {}
         self.books = {}
 
+    def unique_isbn(self, isbn):
+        for book, value in self.books.items():
+            if book.get_isbn() == isbn:
+                return False
+        return True
+
     def create_book(self, title, isbn):
+        while not self.unique_isbn(isbn):
+            print("ISBN: {isbn} not unique".format(isbn=isbn))
+            isbn = ''.join(random.sample("0123456789", 8))
+            print("Generated new ISBN: {isbn}".format(isbn=isbn))
         return Book(title, isbn)
 
     def create_novel(self, title, author, isbn):
