@@ -1,4 +1,7 @@
+#!/usr/bin/env python3
+
 import random
+
 class User(object):
     def __init__(self, name, email):
         self.name = name
@@ -89,12 +92,21 @@ class Non_Fiction(Book):
         return self.level
 
     def __repr__(self):
-        return "{title}, a {level} manual on {subject}".format(title=self.title, level=self.level, subject=self.subject)
+        return "{title}, a {level} manual on {subject}".format(
+            title=self.title, level=self.level, subject=self.subject)
 
 class TomeRater(object):
     def __init__(self):
         self.users = {}
         self.books = {}
+
+    def __repr__(self):
+        return "TomeRater consists of {users} users and {books} books.".format(
+           users=len(self.users), books=len(self.books))
+
+    def __eq__(self, other_tomerater):
+        if len(self.users) == len(other_tomerater.users) and len(self.books) == len(other_tomerater.books):
+            return "These TomeRater's have the same amount of users and books."
 
     def unique_isbn(self, isbn):
         for book, value in self.books.items():
