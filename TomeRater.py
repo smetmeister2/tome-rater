@@ -127,14 +127,28 @@ class TomeRater(object):
         else:
             return "No user with email {email}!".format(email=email)
 
+    def valid_email(self, email):
+        if not "@" in email:
+            return False
+        if ".org" in email:
+            return True
+        elif ".edu" in email:
+            return True
+        elif ".com" in email:
+            return True
+        return False
+
     def add_user(self, name, email, user_books=None):
-        if self.users.get(email):
-            print("User with email: {email}, already exists".format(email=email))
+        if not self.valid_email(email):
+            print("{email} not valid".format(email=email))
         else:
-            self.users[email] = User(name, email)
-            if user_books:
-                for book in user_books:
-                    self.add_book_to_user(book, email, book.get_average())
+            if self.users.get(email):
+                print("User with email: {email}, already exists".format(email=email))
+            else:
+                self.users[email] = User(name, email)
+                if user_books:
+                    for book in user_books:
+                        self.add_book_to_user(book, email, book.get_average())
 
     # Analysis methods
     def print_catalog(self):
