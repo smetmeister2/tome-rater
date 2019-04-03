@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+#
+# TomeRater.py Made by Kevin.
+#
 
 import random
 
@@ -8,13 +11,6 @@ class User(object):
         self.email = email
         self.books = {}
 
-    def get_email(self):
-        return self.email
-
-    def change_email(self, address):
-        self.email = address
-        print("The email for {user} has been changed to {newmail}.".format(user=self.name, newmail=address))
-
     def __repr__(self):
         return "User {user}, email: {email}, books read: {books}".format(user=self.name, email=self.email, books=len(self.books))
 
@@ -22,23 +18,41 @@ class User(object):
         if self.name == other_user.name and self.email == other_user.email:
             return "These users are the same!"
 
+    def get_email(self):
+        return self.email
+
+    def change_email(self, address):
+        self.email = address
+        print("The email for {user} has been changed to {newmail}.".format(user=self.name, newmail=address))
+
     def read_book(self, book, rating=None):
         self.books[book] = rating
 
     def get_average_rating(self):
         total = 0
         count = 0
-        for book,rate in self.books.items():
-            if rate:
-                total += rate
+        for rating in self.books.values():
+            if rating:
+                total += rating
                 count += 1
-        return total/count
+        return total / count
+
 
 class Book(object):
     def __init__(self, title, isbn):
         self.title = title
         self.isbn = isbn
         self.ratings = []
+
+    def __eq__(self, other_book):
+        if self.title == other_book.title and self.isbn == other_book.isbn:
+            return "These books are the same!"
+
+    def __hash__(self):
+        return hash((self.title, self.isbn))
+
+    def __repr__(self):
+        return "{title}".format(title=self.title)
 
     def get_title(self):
         return self.title
@@ -56,27 +70,21 @@ class Book(object):
         else:
             print("Invalid Rating")
 
-    def __eq__(self, other_book):
-        if self.title == other_book.title and self.isbn == other_book.isbn:
-            return "These books are the same!"
-
-    def __hash__(self):
-        return hash((self.title, self.isbn))
-
     def get_average(self):
         if len(self.ratings) >= 1:
             return sum(self.ratings) / len(self.ratings)
+
 
 class Fiction(Book):
     def __init__(self, title, author, isbn):
         super().__init__(title, isbn)
         self.author = author
 
-    def get_author(self):
-        return self.author
-
     def __repr__(self):
         return "{title} by {author}".format(title=self.title, author=self.author)
+
+    def get_author(self):
+        return self.author
 
 
 class Non_Fiction(Book):
@@ -85,15 +93,15 @@ class Non_Fiction(Book):
         self.subject = subject
         self.level = level
 
+    def __repr__(self):
+        return "{title}, a {level} manual on {subject}".format(
+            title=self.title, level=self.level, subject=self.subject)
+
     def get_subject(self):
         return self.subject
 
     def get_level(self):
         return self.level
-
-    def __repr__(self):
-        return "{title}, a {level} manual on {subject}".format(
-            title=self.title, level=self.level, subject=self.subject)
 
 class TomeRater(object):
     def __init__(self):
@@ -109,7 +117,7 @@ class TomeRater(object):
             return "These TomeRater's have the same amount of users and books."
 
     def unique_isbn(self, isbn):
-        for book, value in self.books.items():
+        for book in self.books.keys():
             if book.get_isbn() == isbn:
                 return False
         return True
@@ -164,34 +172,34 @@ class TomeRater(object):
 
     # Analysis methods
     def print_catalog(self):
-        for key, value in self.books.items():
-            print(key)
+        for book in self.books.keys():
+            print(book)
 
     def print_users(self):
-        for key, value in self.users.items():
-            print(value)
+        for user in self.users.values():
+            print(user)
 
     def most_read_book(self):
         return max(self.books, key=self.books.get)
 
     def highest_rated_book(self):
-        highest_book = 0
+        highest_book = {}
         highest_value = 0
-        for key, value in self.books.items():
-            current = key.get_average()
+        for book in self.books.keys():
+            current = book.get_average()
             if current > highest_value:
                 highest_value = current
-                highest_book = key
+                highest_book = book
         return highest_book
 
     def most_positive_user(self):
-        positive_user = 0
+        positive_user = {}
         positivest_rating = 0
-        for key, value in self.users.items():
-            current = value.get_average_rating()
+        for user in self.users.values():
+            current = user.get_average_rating()
             if current > positivest_rating:
                 positivest_rating = current
-                positive_user = value
+                positive_user = user
         return positive_user
 
 
