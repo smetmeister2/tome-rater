@@ -31,12 +31,33 @@ Tome_Rater.add_book_to_user(novel3, "david@computation.org", 4)
 
 
 #Uncomment these to test your functions:
-# Tome_Rater.print_catalog()
-# Tome_Rater.print_users()
+print("Catalog:")
+Tome_Rater.print_catalog()
+print("USERS:")
+Tome_Rater.print_users()
 
-# print("Most positive user:")
-# print(Tome_Rater.most_positive_user())
-# print("Highest rated book:")
-# print(Tome_Rater.highest_rated_book())
-# print("Most read book:")
-# print(Tome_Rater.most_read_book())
+print("Most positive user:")
+print(Tome_Rater.most_positive_user())
+print("Highest rated book:")
+print(Tome_Rater.highest_rated_book())
+print("Most read book:")
+print(Tome_Rater.most_read_book())
+
+# Testing creative things
+# Unique user
+Tome_Rater.add_user("David Marr", "david@computation.org")
+# Unique isbn
+book2 = Tome_Rater.create_book("Krakaka", 12345678)
+print(book2.get_isbn())
+# Check if email is valid
+Tome_Rater.add_user("No@", "davidcomputation.org")
+Tome_Rater.add_user("no-org", "david@computation")
+Tome_Rater.add_user("no", "davidcomputation")
+Tome_Rater.add_user("edu", "david@computation.edu")
+Tome_Rater.add_user("com", "david@computation.com")
+Tome_Rater.add_user("nl", "david@computation.nl")
+Tome_Rater.print_users()
+
+# Test dunder Tome_Rater
+print(Tome_Rater)
+print(Tome_Rater == Tome_Rater)
